@@ -45,6 +45,7 @@ public class Db {
 		
 		return rs;
 	}
+	//已知名字查找用户
 	public int selectUser(String name){
 		int id=0;
 		String sql="select userId from user where name=?";
@@ -53,7 +54,6 @@ public class Db {
 			pre.setString(1, name);
 			rs=pre.executeQuery();
 			if(rs.next()){
-				System.out.println("get");
 				id=rs.getInt("userId");
 			}
 			else
@@ -61,6 +61,25 @@ public class Db {
 				
 		} catch (Exception e) {
 			System.out.println("查询出错");
+			System.out.println(e.getMessage());
+		}
+		
+		return id;
+	}
+	//保存用户
+	public int saveUser(String loc,String prefession,int gen,String name){
+		int id=0;
+		String sql="insert into user (location,profession,gender,name) values (?,?,?,?)";
+		//System.out.println(sql);
+		try {
+			pre=conn.prepareStatement(sql);
+			pre.setString(1, loc);
+			pre.setString(2, prefession);
+			pre.setInt(3, gen);
+			pre.setString(4, name);
+			id=pre.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("保存用户出错");
 			System.out.println(e.getMessage());
 		}
 		

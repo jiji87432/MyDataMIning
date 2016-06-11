@@ -30,7 +30,7 @@ public class Main {
 	             System.out.println(username +" "+ password);    
 			}
 			*/
-			System.out.println(db.selectUser("我"));
+			System.out.println(db.saveUser("问问","问问",2,"问问"));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
