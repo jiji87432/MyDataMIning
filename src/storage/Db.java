@@ -86,18 +86,18 @@ public class Db {
 		return id;
 	}
 	//已知名字查找用户
-	public int selectUser(String name){
+	public int selectTag(String content){
 		int id=0;
-		String sql="select userId from user where name=?";
+		String sql="select tagId from user where content=?";
 		try {
 			pre=conn.prepareStatement(sql);
-			pre.setString(1, name);
+			pre.setString(1, content);
 			rs=pre.executeQuery();
 			if(rs.next()){
-				id=rs.getInt("userId");
+				id=rs.getInt("tagId");
 			}
 			else
-				System.out.println("user is not exit");
+				System.out.println("tag is not exit");
 				
 		} catch (Exception e) {
 			System.out.println("查询出错");
@@ -107,16 +107,50 @@ public class Db {
 		return id;
 	}
 	//保存用户
-	public int saveUser(String loc,String prefession,int gen,String name){
+	public int saveTag(String content){
 		int id=0;
-		String sql="insert into user (location,profession,gender,name) values (?,?,?,?)";
+		String sql="insert into tag (content) values (?)";
 		//System.out.println(sql);
 		try {
 			pre=conn.prepareStatement(sql);
-			pre.setString(1, loc);
-			pre.setString(2, prefession);
-			pre.setInt(3, gen);
-			pre.setString(4, name);
+			pre.setString(1, content);
+			id=pre.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("保存用户出错");
+			System.out.println(e.getMessage());
+		}
+		
+		return id;
+	}
+	//已知名字查找用户
+	public int selectTopic(String content){
+		int id=0;
+		String sql="select topicId from user where content=?";
+		try {
+			pre=conn.prepareStatement(sql);
+			pre.setString(1, content);
+			rs=pre.executeQuery();
+			if(rs.next()){
+				id=rs.getInt("topicId");
+			}
+			else
+				System.out.println("topic is not exit");
+				
+		} catch (Exception e) {
+			System.out.println("查询出错");
+			System.out.println(e.getMessage());
+		}
+		
+		return id;
+	}
+	//保存用户
+	public int saveTopic(String content){
+		int id=0;
+		String sql="insert into topic (content) values (?)";
+		//System.out.println(sql);
+		try {
+			pre=conn.prepareStatement(sql);
+			pre.setString(1, content);
 			id=pre.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("保存用户出错");
