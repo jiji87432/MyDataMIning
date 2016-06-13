@@ -44,6 +44,8 @@ public class SpiderQueue {
 			
 	}
 	public  boolean unVisitedUrlsEmpty(){
+		if(unVisitedUrl==null)
+			return false;
 		return unVisitedUrl.empty();
 	}
 	public int getUnVisitedUrlNum(){

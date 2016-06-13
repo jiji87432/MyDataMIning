@@ -84,7 +84,7 @@ public class UserEntity {
 			setUrl(u);
 			setTag(tag);
 			
-			System.out.println(this);
+			//System.out.println(this);
 		}
 
 		

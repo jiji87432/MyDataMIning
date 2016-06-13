@@ -1,7 +1,11 @@
-create table main(
+create table user_tag(
 	id int(100) primary key auto_increment,
 	userId int(100) not null,
-	tagId int(100) not null,
+	tagId int(100) not null
+);
+create table user_topic(
+	id int(100) primary key auto_increment,
+	userId int(100) not null,
 	topicId int(100) not null
 );
 create table tag(

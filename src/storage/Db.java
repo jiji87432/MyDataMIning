@@ -15,8 +15,8 @@ public class Db {
 	//链接数据库变量
 	public static Connection conn=null;
 	//编辑sql变量
-	public PreparedStatement pre=null;
-	public ResultSet rs=null;
+	public static PreparedStatement pre=null;
+	public static ResultSet rs=null;
 	//链接数据库函数
 	public static Connection getConn(){
 		try {
@@ -46,7 +46,7 @@ public class Db {
 		return rs;
 	}
 	//已知名字查找用户
-	public int selectUser(String name){
+	public static int selectUser(String name){
 		int id=0;
 		String sql="select userId from user where name=?";
 		try {
@@ -67,7 +67,7 @@ public class Db {
 		return id;
 	}
 	//保存用户
-	public int saveUser(String loc,String prefession,int gen,String name){
+	public static int saveUser(String loc,String prefession,int gen,String name){
 		int id=0;
 		String sql="insert into user (location,profession,gender,name) values (?,?,?,?)";
 		//System.out.println(sql);
@@ -80,15 +80,15 @@ public class Db {
 			id=pre.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("保存用户出错");
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		return id;
 	}
-	//已知名字查找用户
-	public int selectTag(String content){
+	//已知名字查找标签
+	public static int selectTag(String content){
 		int id=0;
-		String sql="select tagId from user where content=?";
+		String sql="select tagId from tag where content=?";
 		try {
 			pre=conn.prepareStatement(sql);
 			pre.setString(1, content);
@@ -106,8 +106,8 @@ public class Db {
 		
 		return id;
 	}
-	//保存用户
-	public int saveTag(String content){
+	//保存标签
+	public static int saveTag(String content){
 		int id=0;
 		String sql="insert into tag (content) values (?)";
 		//System.out.println(sql);
@@ -116,16 +116,16 @@ public class Db {
 			pre.setString(1, content);
 			id=pre.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("保存用户出错");
+			System.out.println("保存标签出错");
 			System.out.println(e.getMessage());
 		}
 		
 		return id;
 	}
-	//已知名字查找用户
-	public int selectTopic(String content){
+	//已知名字查找话题
+	public static int selectTopic(String content){
 		int id=0;
-		String sql="select topicId from user where content=?";
+		String sql="select topicId from topic where content=?";
 		try {
 			pre=conn.prepareStatement(sql);
 			pre.setString(1, content);
@@ -143,8 +143,8 @@ public class Db {
 		
 		return id;
 	}
-	//保存用户
-	public int saveTopic(String content){
+	//保存话题
+	public static int saveTopic(String content){
 		int id=0;
 		String sql="insert into topic (content) values (?)";
 		//System.out.println(sql);
@@ -153,7 +153,41 @@ public class Db {
 			pre.setString(1, content);
 			id=pre.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("保存用户出错");
+			System.out.println("保存话题出错");
+			System.out.println(e.getMessage());
+		}
+		
+		return id;
+	}
+	//保存用户-话题
+	public static int saveUserTopic(int userId,int topicId){
+		int id=0;
+		String sql="insert into user_topic (userId,topicId) values (?,?)";
+		//System.out.println(sql);
+		try {
+			pre=conn.prepareStatement(sql);
+			pre.setInt(1, userId);
+			pre.setInt(2, topicId);
+			id=pre.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("保存用户-话题出错");
+			System.out.println(e.getMessage());
+		}
+		
+		return id;
+	}
+	//保存用户-标签
+	public static int saveUserTag(int userId,int tagId){
+		int id=0;
+		String sql="insert into user_tag (userId,tagId) values (?,?)";
+		//System.out.println(sql);
+		try {
+			pre=conn.prepareStatement(sql);
+			pre.setInt(1, userId);
+			pre.setInt(2, tagId);
+			id=pre.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("保存用户-标签出错");
 			System.out.println(e.getMessage());
 		}
 		
@@ -167,7 +201,6 @@ public class Db {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
 	}
 	
 }

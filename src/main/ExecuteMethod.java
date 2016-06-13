@@ -1,12 +1,12 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import spider.Regx;
 import spider.SpiderQueue;
 import spider.SpiderTool;
 import spider.UserEntity;
+import storage.DbMethod;
 
 public class ExecuteMethod implements Runnable{
 	protected SpiderQueue queue;
@@ -32,35 +32,52 @@ public class ExecuteMethod implements Runnable{
 		ArrayList<String> tagList=new ArrayList<String>();
 		ArrayList<String> authorList=new ArrayList<String>();
 		
-		while(!queue.unVisitedUrlsEmpty()&&queue.getUnVisitedUrlNum()<10000){
-			UserEntity user=new UserEntity();
-			
-			synchronized (this) {
-				url=(String) queue.unVisitedUrlDequeue();
-				queue.addVisiteUrl(url);
-
-			}
-			content=SpiderTool.SendGet_client(url);
-			
-			webUrlList.clear();
-			tagList.clear();
-			authorList.clear();
-			
-			webUrlList.addAll(SpiderTool.getWebAllUrl(content));
-			tagList.addAll(SpiderTool.getAllContent(content,Regx.getContent_tag));
-			authorList.addAll(SpiderTool.gerPeopleUrl(SpiderTool.getAllContent(content,Regx.getUrl_author)));
-			
-			
-			
-			
-			synchronized (this) {
+		while(true){
+			if(!queue.unVisitedUrlsEmpty()){
+				UserEntity user=new UserEntity();
 				
-				for(String authorUrl:authorList){
-					System.out.println(Thread.currentThread().getName());
-					user.initUser(authorUrl,tagList);
+				synchronized (this) {
+					url=(String) queue.unVisitedUrlDequeue();
+					queue.addVisiteUrl(url);
+
 				}
-			}
-	
+				content=SpiderTool.SendGet_client(url);
+				
+				webUrlList.clear();
+				tagList.clear();
+				authorList.clear();
+				
+				webUrlList.addAll(SpiderTool.getWebAllUrl(content));
+				tagList.addAll(SpiderTool.getAllContent(content,Regx.getContent_tag));
+				authorList.addAll(SpiderTool.gerPeopleUrl(SpiderTool.getAllContent(content,Regx.getUrl_author)));
+				
+				
+				
+				
+				synchronized (this) {
+					
+					for(String authorUrl:authorList){
+						int id=0;
+						user.initUser(authorUrl,tagList);
+						if(user!=null)
+							id=DbMethod.saveUser(user);
+						System.out.println("user id:"+id);
+						System.out.println(user);
+					}
+					if(queue.getUnVisitedUrlNum()<10000)
+						for(String webUrl:webUrlList){
+							queue.addUnvisitedUrl(webUrl);
+						}
+				}
+		
+			} else
+				try {
+					Thread.currentThread().sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 				
 			
 			
