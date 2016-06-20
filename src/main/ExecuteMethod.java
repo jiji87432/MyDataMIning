@@ -28,25 +28,26 @@ public class ExecuteMethod implements Runnable{
 		// TODO Auto-generated method stub
 		String url=new String();
 		String content=new String();
-		ArrayList<String> webUrlList=new ArrayList<String>();
-		ArrayList<String> tagList=new ArrayList<String>();
-		ArrayList<String> authorList=new ArrayList<String>();
+		ArrayList<String> webUrlList=new ArrayList<String>();			//存在程序上的url队列
+		ArrayList<String> tagList=new ArrayList<String>();				//这个url页面的标签
+		ArrayList<String> authorList=new ArrayList<String>();			//用户的url
 		
 		while(true){
 			if(!queue.unVisitedUrlsEmpty()){
 				UserEntity user=new UserEntity();
-				
+				//同步，取url
 				synchronized (this) {
 					url=(String) queue.unVisitedUrlDequeue();
 					queue.addVisiteUrl(url);
 
 				}
+				//取内容的方法，httpclient
 				content=SpiderTool.SendGet_client(url);
 				
 				webUrlList.clear();
 				tagList.clear();
 				authorList.clear();
-				
+				//获取url
 				webUrlList.addAll(SpiderTool.getWebAllUrl(content));
 				tagList.addAll(SpiderTool.getAllContent(content,Regx.getContent_tag));
 				authorList.addAll(SpiderTool.gerPeopleUrl(SpiderTool.getAllContent(content,Regx.getUrl_author)));

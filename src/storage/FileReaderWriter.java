@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileReaderWriter {
+	//设置写入属性
 	public static boolean createNewFile(String filePath){
 		boolean ifSuccess=true;
 		String filePathTurn=filePath.replaceAll("\\\\","/");
@@ -23,6 +24,7 @@ public class FileReaderWriter {
 		
 		return ifSuccess;
 	}
+	//写入文件
 	public static boolean writeIntoFile(String content,String filePath,boolean ifAppend){
 		boolean ifSuccess=true;
 		int index=filePath.lastIndexOf("/");
