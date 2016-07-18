@@ -8,7 +8,7 @@ import storage.Db;
 public class Main {
 	
 	public static void main(String[] args) throws SQLException {
-		//spiderZhihu();				//爬取知乎的方法
+		spiderZhihu();				//爬取知乎的方法
 		//dataAnalysis()				//数据挖掘
 		
 		System.out.println("end");
